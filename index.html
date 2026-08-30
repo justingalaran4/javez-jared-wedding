@@ -198,90 +198,64 @@
             100% { transform: translateY(-20vh) scale(1); opacity: 0; }
         }
 
-        /* --- UPDATED: Beautiful, Realistic SVG Butterflies --- */
-        .magical-butterfly {
+        /* --- UPDATED: Ultra-Realistic Butterfly Animation Physics --- */
+        .butterfly-container {
             position: absolute;
-            width: 40px; height: 40px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            will-change: transform, opacity;
-            animation: fly-across var(--flight-duration) cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite forwards;
+            left: var(--start-x);
+            top: var(--start-y);
+            animation: fly-across var(--fly-time) linear forwards;
             animation-delay: var(--delay);
-            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.3));
+            opacity: 0;
+            z-index: 9999;
+            will-change: transform, opacity;
         }
-
-        .butterfly-body {
-            position: absolute;
-            width: 2.5px; height: 20px;
-            background: linear-gradient(to bottom, rgba(30, 30, 30, 0.9), rgba(10, 10, 10, 0.8), rgba(30, 30, 30, 0.9));
-            border-radius: 3px;
-            z-index: 10;
-        }
-
-        /* Added Antennae for extra elegance */
-        .butterfly-body::before, .butterfly-body::after {
-            content: '';
-            position: absolute;
-            top: -5px;
-            width: 1px;
-            height: 6px;
-            background: rgba(30, 30, 30, 0.8);
-            border-radius: 50%;
-        }
-
-        .butterfly-body::before { left: 0; transform: rotate(-25deg); }
-        .butterfly-body::after { right: 0; transform: rotate(25deg); }
-
-        .wing-container {
-            position: absolute;
-            width: 100%; height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            perspective: 300px;
-        }
-
-        .wing-svg {
-            width: 22px;
-            height: 38px;
-            position: absolute;
-            transform-origin: 100% 50%; /* Anchor perfectly to the body */
-            animation: flutter-left var(--flutter-speed) infinite alternate ease-in-out;
-            opacity: 0.95;
-            filter: drop-shadow(0 0 3px currentColor);
-        }
-
-        .wing-svg.right {
-            /* Handled perfectly via scaleX(-1) in animation */
-            animation: flutter-right var(--flutter-speed) infinite alternate ease-in-out;
-        }
-
-        /* Upgraded Flapping Animation for realism */
-        @keyframes flutter-left {
-            0% { transform: rotateY(0deg) rotateZ(2deg); }
-            100% { transform: rotateY(70deg) rotateZ(6deg); }
-        }
-
-        @keyframes flutter-right {
-            0% { transform: scaleX(-1) rotateY(0deg) rotateZ(2deg); }
-            100% { transform: scaleX(-1) rotateY(70deg) rotateZ(6deg); }
-        }
-
-        /* Hardware Accelerated Flight Path */
+        
+        /* The scaleX controls facing direction flawlessly without 3D math issues */
         @keyframes fly-across {
-            0% { 
-                transform: translate3d(var(--startX), var(--startY), 0) scale(var(--scale)) rotate(var(--rotStart)); 
-                opacity: 0; 
-            }
-            10% { opacity: 0.9; }
-            90% { opacity: 0.9; }
-            100% { 
-                transform: translate3d(var(--endX), var(--endY), 0) scale(var(--scale)) rotate(var(--rotEnd)); 
-                opacity: 0; 
-            }
+            0% { transform: scaleX(calc(var(--scale) * var(--direction))) scaleY(var(--scale)) translate3d(0, 0, 0) rotateZ(var(--tilt)); opacity: 0; }
+            10% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { transform: scaleX(calc(var(--scale) * var(--direction))) scaleY(var(--scale)) translate3d(var(--fly-x), var(--fly-y), 0) rotateZ(var(--tilt)); opacity: 0; }
         }
+
+        /* Organic fluttering bob up and down */
+        .butterfly-bob {
+            animation: bob 1.8s ease-in-out infinite alternate;
+        }
+
+        @keyframes bob {
+            0% { transform: translateY(-12px) rotateX(15deg); }
+            100% { transform: translateY(12px) rotateX(-5deg); }
+        }
+
+        .butterfly-svg {
+            display: block;
+            width: 50px; 
+            height: 50px; 
+            overflow: visible;
+            filter: drop-shadow(0 8px 12px rgba(22, 46, 34, 0.4));
+        }
+
+        .wing-top {
+            transform-origin: 0px -1px;
+            animation: flap-top var(--flap-speed) cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+        }
+
+        .wing-bottom {
+            transform-origin: 0px 1px;
+            animation: flap-bottom var(--flap-speed) cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+        }
+
+        @keyframes flap-top {
+            0% { transform: rotateX(5deg); }
+            100% { transform: rotateX(72deg); }
+        }
+
+        @keyframes flap-bottom {
+            0% { transform: rotateX(-5deg); }
+            100% { transform: rotateX(-72deg); }
+        }
+        /* ----------------------------------------------------------- */
 
         /* --- MOBILE OPTIMIZED STYLES --- */
         @keyframes fadeInUp {
@@ -712,7 +686,22 @@
 
     <!-- MAGICAL BUTTERFLY & FIREFLY CONTAINER -->
     <div id="magic-insects">
-        <!-- Insects are injected intelligently via JS to prevent HTML bloat and ensure zero lag -->
+        <!-- SVG Gradients for beautiful, custom-colored realistic butterflies -->
+        <svg style="width:0; height:0; position:absolute; z-index:-1;">
+            <defs>
+                <radialGradient id="wing-grad-1" cx="30%" cy="30%" r="70%">
+                    <stop offset="0%" stop-color="#C5A880" />
+                    <stop offset="60%" stop-color="#2C5E43" />
+                    <stop offset="100%" stop-color="#162E22" />
+                </radialGradient>
+                <radialGradient id="wing-grad-2" cx="30%" cy="30%" r="70%">
+                    <stop offset="0%" stop-color="#F9F8F6" />
+                    <stop offset="60%" stop-color="#7A9A86" />
+                    <stop offset="100%" stop-color="#162E22" />
+                </radialGradient>
+            </defs>
+        </svg>
+        <!-- Insects are injected intelligently via JS to prevent HTML bloat -->
     </div>
 
     <!-- CINEMATIC TOP/BOTTOM DOOR OPENING ANIMATION OVERLAY -->
@@ -1001,72 +990,83 @@ With grateful hearts, we invite our beloved family and friends to witness and ce
                 magicInsects.appendChild(firefly);
             }
 
-            // Beautiful, elegant swallowtail-style butterfly wing SVG path (UPDATED)
-            const butterflyWingSVG = `
-                <svg viewBox="0 0 30 50" class="wing-svg" fill="currentColor">
-                    <path d="M29.5,24.5 C15,-5 -2,5 0,18 C2,28 12,27 12,27 C-1,31 -2,47 6,49 C15,52 25,35 29.5,24.5 Z"/>
-                </svg>
-            `;
-
-            // Elegance palette for butterflies
-            const colors = ['#C5A880', '#FFFFFF', '#7A9A86', '#EFECE6'];
-
-            // Generate 12 distinct magical butterflies (Increased from 8 for more beauty)
+            // Generate 12 beautiful, ultra-realistic butterflies
             for(let i = 0; i < 12; i++) {
-                let butterfly = document.createElement('div');
-                butterfly.className = 'magical-butterfly';
+                let container = document.createElement('div');
+                container.className = 'butterfly-container';
                 
-                // Randomize appearance
-                const scale = Math.random() * 0.6 + 0.5; // Scale between 0.5 and 1.1
-                const color = colors[Math.floor(Math.random() * colors.length)];
-                const flutterSpeed = (Math.random() * 0.06 + 0.06).toFixed(2) + 's';
+                // 1 = Flying Right, -1 = Flying Left
+                const isFlyingRight = Math.random() > 0.5;
+                const direction = isFlyingRight ? 1 : -1;
                 
-                // --- FIXED DIRECTION LOGIC ---
-                // Randomize flight path coordinates
-                const startX = Math.random() > 0.5 ? -10 : 110; // Start off screen left or right
-                const isFlyingRight = startX === -10;
-                const endX = isFlyingRight ? 110 : -10; // Fly to opposite side
+                const startX = isFlyingRight ? '-10vw' : '110vw';
+                const startY = (Math.random() * 80 + 10) + 'vh'; // 10vh to 90vh
                 
-                const startY = Math.random() * 80 + 10; // Random height between 10vh and 90vh
-                const endY = startY + (Math.random() * 50 - 25); // Drift up or down
+                // Flight math simplified: Always flies "forward" thanks to scaleX(-1) flipping the axis!
+                const flyX = (Math.random() * 20 + 110) + 'vw'; 
                 
-                // Automatically calculate exact orientation angle so the butterfly ALWAYS faces where it is going!
-                const deltaX = isFlyingRight ? 120 : -120;
-                const deltaY = endY - startY; 
-                const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+                // Drift up or down
+                const deltaY = (Math.random() * 60 - 30);
+                const flyY = deltaY + 'vh';
                 
-                // Our HTML butterfly points purely UP by default (-90 deg visually). 
-                // We add 90 degrees so its top points toward the calculated flight trajectory perfectly.
-                const rotStart = (angle + 90) + (Math.random() * 10 - 5);
-                const rotEnd = (angle + 90) + (Math.random() * 10 - 5);
+                // Naturally tilts body up or down depending on vertical flight path
+                const tilt = (deltaY * direction * 0.4) + 'deg';
+                
+                // Pick a gradient color to match your wedding palette
+                const gradId = Math.random() > 0.5 ? 'wing-grad-1' : 'wing-grad-2';
 
-                // Set CSS variables for zero-lag hardware accelerated animation
-                butterfly.style.setProperty('--scale', scale);
-                butterfly.style.color = color;
-                butterfly.style.setProperty('--flutter-speed', flutterSpeed);
-                butterfly.style.setProperty('--flight-duration', (Math.random() * 12 + 10) + 's'); // Elegant flight
-                butterfly.style.setProperty('--delay', (Math.random() * 8) + 's');
-                butterfly.style.setProperty('--startX', startX + 'vw');
-                butterfly.style.setProperty('--endX', endX + 'vw');
-                butterfly.style.setProperty('--startY', startY + 'vh');
-                butterfly.style.setProperty('--endY', endY + 'vh');
-                butterfly.style.setProperty('--rotStart', rotStart + 'deg');
-                butterfly.style.setProperty('--rotEnd', rotEnd + 'deg');
+                // Set dynamic flight properties
+                container.style.setProperty('--start-x', startX);
+                container.style.setProperty('--start-y', startY);
+                container.style.setProperty('--fly-x', flyX);
+                container.style.setProperty('--fly-y', flyY);
+                container.style.setProperty('--direction', direction);
+                container.style.setProperty('--tilt', tilt);
+                container.style.setProperty('--fly-time', (Math.random() * 8 + 12) + 's');
+                container.style.setProperty('--delay', (Math.random() * 6) + 's');
+                container.style.setProperty('--flap-speed', (Math.random() * 0.04 + 0.07) + 's');
+                container.style.setProperty('--scale', Math.random() * 0.35 + 0.65);
 
-                // Build the beautiful butterfly structure
-                butterfly.innerHTML = `
-                    <div class="wing-container">
-                        <div style="position: absolute; width: 50%; height: 100%; right: 50%; display: flex; justify-content: flex-end; align-items: center;">
-                            ${butterflyWingSVG}
-                        </div>
-                        <div style="position: absolute; width: 50%; height: 100%; left: 50%; display: flex; justify-content: flex-start; align-items: center;">
-                            ${butterflyWingSVG.replace('class="wing-svg"', 'class="wing-svg right"')}
-                        </div>
+                // Inject beautifully detailed SVG markup (Swallowtail shape, veins, golden spots)
+                container.innerHTML = `
+                    <div class="butterfly-bob">
+                        <svg viewBox="-50 -50 100 100" class="butterfly-svg">
+                            <!-- Top Wing Section -->
+                            <g class="wing-top">
+                                 <path d="M 0,0 C 15,-10 35,-30 25,-45 C 10,-55 -15,-40 -5,-20 Z" fill="url(#${gradId})" stroke="#162E22" stroke-width="1.5" stroke-linejoin="round" />
+                                 <path d="M -5,-20 C -25,-30 -45,-15 -40,-5 C -35,5 -15,5 0,0 Z" fill="url(#${gradId})" stroke="#162E22" stroke-width="1.5" stroke-linejoin="round" />
+                                 <!-- Delicate Wing Veins -->
+                                 <path d="M 0,0 C 10,-15 20,-25 22,-35" fill="none" stroke="#162E22" stroke-width="0.8" opacity="0.6"/>
+                                 <path d="M 0,0 C 5,-20 5,-35 5,-40" fill="none" stroke="#162E22" stroke-width="0.8" opacity="0.6"/>
+                                 <path d="M 0,0 C -15,-15 -25,-15 -35,-10" fill="none" stroke="#162E22" stroke-width="0.8" opacity="0.6"/>
+                                 <!-- Decorative Golden Spots -->
+                                 <circle cx="15" cy="-40" r="1.5" fill="#C5A880" />
+                                 <circle cx="-30" cy="-15" r="1.5" fill="#C5A880" />
+                            </g>
+                            
+                            <!-- Bottom Wing Section -->
+                            <g class="wing-bottom">
+                                 <path d="M 0,0 C 15,10 35,30 25,45 C 10,55 -15,40 -5,20 Z" fill="url(#${gradId})" stroke="#162E22" stroke-width="1.5" stroke-linejoin="round" />
+                                 <path d="M -5,20 C -25,30 -45,15 -40,5 C -35,-5 -15,-5 0,0 Z" fill="url(#${gradId})" stroke="#162E22" stroke-width="1.5" stroke-linejoin="round" />
+                                 <!-- Delicate Wing Veins -->
+                                 <path d="M 0,0 C 10,15 20,25 22,35" fill="none" stroke="#162E22" stroke-width="0.8" opacity="0.6"/>
+                                 <path d="M 0,0 C 5,20 5,35 5,40" fill="none" stroke="#162E22" stroke-width="0.8" opacity="0.6"/>
+                                 <path d="M 0,0 C -15,15 -25,15 -35,10" fill="none" stroke="#162E22" stroke-width="0.8" opacity="0.6"/>
+                                 <!-- Decorative Golden Spots -->
+                                 <circle cx="15" cy="40" r="1.5" fill="#C5A880" />
+                                 <circle cx="-30" cy="15" r="1.5" fill="#C5A880" />
+                            </g>
+                            
+                            <!-- Butterfly Body & Antennae -->
+                            <rect x="-15" y="-2" width="28" height="4" rx="2" fill="#162E22" />
+                            <circle cx="13" cy="0" r="3" fill="#162E22" />
+                            <path d="M 14,-1.5 C 20,-6 25,-8 28,-6" fill="none" stroke="#162E22" stroke-width="1" />
+                            <path d="M 14,1.5 C 20,6 25,8 28,6" fill="none" stroke="#162E22" stroke-width="1" />
+                        </svg>
                     </div>
-                    <div class="butterfly-body"></div>
                 `;
                 
-                magicInsects.appendChild(butterfly);
+                magicInsects.appendChild(container);
             }
         }
 
