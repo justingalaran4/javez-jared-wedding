@@ -568,7 +568,7 @@
             transform: scale(1.2);
         }
 
-        /* --- NEW ENTOURAGE SLIDER CSS (Added as requested) --- */
+        /* --- ENTOURAGE SLIDER CSS (UPDATED FOR PERFECT IMAGE VISIBILITY) --- */
         .entourage-slider {
             display: flex;
             overflow-x: auto;
@@ -585,19 +585,19 @@
         }
 
         .entourage-slide {
-            flex: 0 0 90%; /* Shows a peek of the next image to encourage swiping */
+            flex: 0 0 90%; 
             scroll-snap-align: center;
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 12px 30px rgba(22, 46, 34, 0.15);
             border: 2px solid var(--gold);
-            background-color: #000;
+            background-color: var(--cream); /* Blends perfectly with your image backgrounds */
         }
 
         .entourage-slide img {
             width: 100%;
-            height: 70vh; /* Extremely large, almost the full size of the phone */
-            object-fit: cover;
+            height: 75vh; /* Maintains uniform sizing for the slider */
+            object-fit: contain; /* Changed to 'contain' so text will never be cropped */
             display: block;
         }
         /* --------------------------------------------------- */
