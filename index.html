@@ -209,7 +209,7 @@
             z-index: 9999;
             will-change: transform, opacity;
         }
-        
+
         /* The scaleX controls facing direction flawlessly without 3D math issues */
         @keyframes fly-across {
             0% { transform: scaleX(calc(var(--scale) * var(--direction))) scaleY(var(--scale)) translate3d(0, 0, 0) rotateZ(var(--tilt)); opacity: 0; }
@@ -465,7 +465,7 @@
             background-color: #000;
             position: relative;
         }
-        
+
         .video-container video {
             width: 100%;
             display: block;
@@ -567,6 +567,40 @@
             background-color: var(--deep-green);
             transform: scale(1.2);
         }
+
+        /* --- NEW ENTOURAGE SLIDER CSS (Added as requested) --- */
+        .entourage-slider {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 1rem;
+            padding: 10px 5%;
+            scroll-padding: 0 5%;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Hide scrollbar Firefox */
+        }
+        
+        .entourage-slider::-webkit-scrollbar {
+            display: none; /* Hide scrollbar Chrome/Safari */
+        }
+
+        .entourage-slide {
+            flex: 0 0 90%; /* Shows a peek of the next image to encourage swiping */
+            scroll-snap-align: center;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(22, 46, 34, 0.15);
+            border: 2px solid var(--gold);
+            background-color: #000;
+        }
+
+        .entourage-slide img {
+            width: 100%;
+            height: 70vh; /* Extremely large, almost the full size of the phone */
+            object-fit: cover;
+            display: block;
+        }
+        /* --------------------------------------------------- */
 
         .pegs-grid {
             display: grid;
@@ -708,7 +742,7 @@
     <div id="door-overlay">
         <div class="door top-door"></div>
         <div class="door bottom-door"></div>
-        
+
         <div class="door-content animate-fade-in">
             <!-- Elegant Floral Corners -->
             <i class="fa-solid fa-leaf floral-corner floral-top-left"></i>
@@ -818,7 +852,7 @@ With grateful hearts, we invite our beloved family and friends to witness and ce
             <div class="divider"></div>
         </div>
         <div class="glass-card reveal">
-            
+
             <!-- CLEAN ARROW-LESS SLIDESHOW CONTAINER -->
             <div class="slideshow-container">
                 <div class="slide fade">
@@ -834,7 +868,7 @@ With grateful hearts, we invite our beloved family and friends to witness and ce
                     <img src="12.jpg" alt="Our Story 3" loading="lazy" onerror="this.src='https://placehold.co/600x400/7A9A86/FFFFFF?text=Photo+3'">
                 </div>
             </div>
-            
+
             <!-- Slideshow Dots Indicator -->
             <div class="dots-wrapper">
                 <span class="dot" onclick="currentSlide(1)"></span>
@@ -868,6 +902,34 @@ With grateful hearts, we invite our beloved family and friends to witness and ce
                 </div>
             </div>
         </div>
+    </section>
+
+    <!-- NEW ENTOURAGE TOUCH SLIDER SECTION -->
+    <section class="container" style="padding-top: 4rem; padding-bottom: 0;">
+        <div class="section-title reveal">
+            <h2>The Entourage</h2>
+            <div class="divider"></div>
+        </div>
+        
+        <div class="entourage-slider reveal">
+            <div class="entourage-slide">
+                <img src="entourage1.jpg" alt="Entourage 1" loading="lazy" onerror="this.src='https://placehold.co/800x1200/162E22/C5A880?text=Entourage+1'">
+            </div>
+            <div class="entourage-slide">
+                <img src="entourage2.jpg" alt="Entourage 2" loading="lazy" onerror="this.src='https://placehold.co/800x1200/2C5E43/EFECE6?text=Entourage+2'">
+            </div>
+            <div class="entourage-slide">
+                <img src="entourage3.jpg" alt="Entourage 3" loading="lazy" onerror="this.src='https://placehold.co/800x1200/7A9A86/FFFFFF?text=Entourage+3'">
+            </div>
+            <div class="entourage-slide">
+                <img src="entourage4.jpg" alt="Entourage 4" loading="lazy" onerror="this.src='https://placehold.co/800x1200/D8D2C9/2C2C2C?text=Entourage+4'">
+            </div>
+        </div>
+        
+        <!-- Swipe instruction for mobile users -->
+        <p class="reveal" style="text-align: center; font-size: 0.8rem; color: #888; margin-top: 10px; letter-spacing: 1px; text-transform: uppercase;">
+            <i class="fas fa-arrows-alt-h" style="margin-right: 5px;"></i> Swipe to view
+        </p>
     </section>
 
     <!-- THEME & INSPIRATION PEGS -->
@@ -965,6 +1027,7 @@ With grateful hearts, we invite our beloved family and friends to witness and ce
 
     <!-- FOOTER -->
     <footer>
+        <h2 class="reveal">Javez & Jared</h2>
         <h2 class="reveal">Jared & Javez</h2>
         <p class="reveal" style="letter-spacing: 2px; text-transform: uppercase; font-size: 0.75rem; margin-top: 0.4rem;">Church of God - Roxas &bull; December 18, 2026</p>
     </footer>
@@ -975,11 +1038,11 @@ With grateful hearts, we invite our beloved family and friends to witness and ce
         function openWeddingDoors() {
             const overlay = document.getElementById('door-overlay');
             overlay.classList.add('open');
-            
+
             // Trigger Butterflies & Fireflies
             const magicInsects = document.getElementById('magic-insects');
             magicInsects.classList.add('active');
-            
+
             // Generate Fireflies dynamically
             for(let i = 0; i < 20; i++) {
                 let firefly = document.createElement('div');
@@ -994,24 +1057,24 @@ With grateful hearts, we invite our beloved family and friends to witness and ce
             for(let i = 0; i < 12; i++) {
                 let container = document.createElement('div');
                 container.className = 'butterfly-container';
-                
+
                 // 1 = Flying Right, -1 = Flying Left
                 const isFlyingRight = Math.random() > 0.5;
                 const direction = isFlyingRight ? 1 : -1;
-                
+
                 const startX = isFlyingRight ? '-10vw' : '110vw';
                 const startY = (Math.random() * 80 + 10) + 'vh'; // 10vh to 90vh
-                
+
                 // Flight math simplified: Always flies "forward" thanks to scaleX(-1) flipping the axis!
                 const flyX = (Math.random() * 20 + 110) + 'vw'; 
-                
+
                 // Drift up or down
                 const deltaY = (Math.random() * 60 - 30);
                 const flyY = deltaY + 'vh';
-                
+
                 // Naturally tilts body up or down depending on vertical flight path
                 const tilt = (deltaY * direction * 0.4) + 'deg';
-                
+
                 // Pick a gradient color to match your wedding palette
                 const gradId = Math.random() > 0.5 ? 'wing-grad-1' : 'wing-grad-2';
 
@@ -1065,7 +1128,7 @@ With grateful hearts, we invite our beloved family and friends to witness and ce
                         </svg>
                     </div>
                 `;
-                
+
                 magicInsects.appendChild(container);
             }
         }
